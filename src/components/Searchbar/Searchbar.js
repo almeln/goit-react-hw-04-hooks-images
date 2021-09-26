@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   SearchBarHeader,
@@ -11,18 +11,14 @@ import {
 import { ImSearch } from 'react-icons/im';
 import toast from 'react-hot-toast';
 
-class SearchBar extends Component {
-  state = {
-    searchName: '',
+export default function SearchBar({ onSubmit }) {
+  const [searchName, setSearchName] = useState('');
+
+  const handleNameChange = event => {
+    setSearchName(event.currentTarget.value.toLowerCase());
   };
 
-  handleNameChange = event => {
-    this.setState({ searchName: event.currentTarget.value.toLowerCase() });
-  };
-
-  handleSubmit = event => {
-    const { searchName } = this.state;
-
+  const handleSubmit = event => {
     event.preventDefault();
 
     // Проверка на пустоту
@@ -31,40 +27,87 @@ class SearchBar extends Component {
     }
 
     // В форму передали сабмит
-    this.props.onSubmit(searchName);
+    onSubmit(searchName);
 
-    this.setState({ searchName: '' });
+    setSearchName('');
   };
 
-  render() {
-    const { handleSubmit, handleNameChange } = this;
-    const { searchName } = this.state;
+  return (
+    <SearchBarHeader>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchFormButton type="submit">
+          <ImSearch />
+          <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+        </SearchFormButton>
 
-    return (
-      <SearchBarHeader>
-        <SearchForm onSubmit={handleSubmit}>
-          <SearchFormButton type="submit">
-            <ImSearch />
-            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
-          </SearchFormButton>
-
-          <SearchFormInput
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            name="searchName"
-            value={searchName}
-            onChange={handleNameChange}
-          />
-        </SearchForm>
-      </SearchBarHeader>
-    );
-  }
+        <SearchFormInput
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          name="searchName"
+          value={searchName}
+          onChange={handleNameChange}
+        />
+      </SearchForm>
+    </SearchBarHeader>
+  );
 }
 
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default SearchBar;
+// class SearchBar2 extends Component {
+//   state = {
+//     searchName: '',
+//   };
+
+//   handleNameChange = event => {
+//     this.setState({ searchName: event.currentTarget.value.toLowerCase() });
+//   };
+
+//   handleSubmit = event => {
+//     const { searchName } = this.state;
+
+//     event.preventDefault();
+
+//     // Проверка на пустоту
+//     if (searchName.trim() === '') {
+//       return toast.error('Enter search name !');
+//     }
+
+//     // В форму передали сабмит
+//     this.props.onSubmit(searchName);
+
+//     this.setState({ searchName: '' });
+//   };
+
+//   render() {
+//     const { handleSubmit, handleNameChange } = this;
+//     const { searchName } = this.state;
+
+//     return (
+//       <SearchBarHeader>
+//         <SearchForm onSubmit={handleSubmit}>
+//           <SearchFormButton type="submit">
+//             <ImSearch />
+//             <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+//           </SearchFormButton>
+
+//           <SearchFormInput
+//             type="text"
+//             autoComplete="off"
+//             autoFocus
+//             placeholder="Search images and photos"
+//             name="searchName"
+//             value={searchName}
+//             onChange={handleNameChange}
+//           />
+//         </SearchForm>
+//       </SearchBarHeader>
+//     );
+//   }
+// }
+
+// export default SearchBar;

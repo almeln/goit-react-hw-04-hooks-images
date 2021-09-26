@@ -21,7 +21,7 @@ const ImageGallery = ({ photos, onSelect }) => {
 };
 
 ImageGallery.propTypes = {
-  photos: PropTypes.arrayOf(PropTypes.string).isRequired,
+  photos: PropTypes.arrayOf(PropTypes.shape).isRequired,
   onSelect: PropTypes.func.isRequired,
 };
 
